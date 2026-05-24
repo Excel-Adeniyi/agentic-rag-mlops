@@ -1,0 +1,24 @@
+# Virtual environment
+venv/
+.venv/
+
+# ChromaDB persisted data (regenerated on run)
+chroma_db/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyc
+
+# Environment variables / secrets
+.env
+
+# Mac system files
+.DSStore
+
+# IDE settings
+.vscode/
+.idea/
+
+# Sentence-transformers / model cache (optional, can be large)
+.cache/
