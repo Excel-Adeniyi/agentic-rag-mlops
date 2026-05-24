@@ -14,18 +14,18 @@ documents = [
 
 
 # Load the embedding model
-# print("Loading embedding model...")
+
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-# print("Embedding model loaded successfully.")
+
 
 # Create a ChromaDB client and collection
-# print("Setting up ChromaDB client and collection...")
+
 client = chromadb.PersistentClient(path="./chroma_db")
 #If you have a local ChromaDB server running, you can connect to it like this:
 collection = client.get_or_create_collection(name="mlops_knowledge_base")
 
 #Embedding the documents and adding them to the collection
-# print("Embedding documents and adding to ChromaDB collection...")
+
 # Quick check that our documents loaded
 
 for i, doc in enumerate(documents):
@@ -36,7 +36,6 @@ for i, doc in enumerate(documents):
         documents=[doc]  # The original document
     )
     
-# print(f"Stored {collection.count()} documents in ChromaDB")
 
 # --- RETRIEVAL ---
 # Take a user question and find the most relevant documents
