@@ -57,8 +57,6 @@ print(f"\nQuestion: {question}\n")
 print("Most relevant documents retrieved:")
 for i, doc in enumerate(results['documents'][0]):
     distance = results['distances'][0][i]
-    # print(f"\n  Match {i+1} (distance: {distance:.4f}):")
-    # print(f"  {doc}")
 
 #combined the retrieval results into a single string to send to the LLM    
 retrieved_docs = results['documents'][0]
