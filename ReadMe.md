@@ -1,4 +1,4 @@
-#Agentic RAG for MLOps Pipeline Documentation and Troubleshooting
+# Agentic RAG for MLOps Pipeline Documentation and Troubleshooting
 
 A local, privacy-first Retrieval-Augmented Generation (RAG) system that helps engineers query MLOps pipeline documentation using natural language. Built as part of an MSc Computer Science dissertation at Glasgow Caledonian University.
 
