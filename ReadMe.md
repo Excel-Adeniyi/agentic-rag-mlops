@@ -1,6 +1,6 @@
 # Agentic RAG for MLOps Pipeline Documentation and Troubleshooting
 
-A local, privacy-first Retrieval-Augmented Generation (RAG) system that helps engineers query MLOps pipeline documentation using natural language. Built as part of an MSc Computer Science dissertation at Glasgow Caledonian University.
+A local, privacy-first Retrieval-Augmented Generation (RAG) system that helps engineers query MLOps pipeline documentation using natural language. Built as part of an MSc Computer Science dissertation at Glasgow Caledonian University (2026).
 
 > **Status:** Baseline RAG pipeline complete and verified. Agentic layer in active development.
 
@@ -126,20 +126,6 @@ More modules will be added as the agentic layer is built out.
 1. How does an agentic retrieval layer affect response accuracy compared to a standard RAG pipeline when querying MLOps documentation?
 2. What retrieval strategies does the agent select for different query types, and how do these decisions affect output quality?
 3. What evaluation metrics most effectively capture the usefulness of generated responses in a developer and operations context?
-
----
-
-## Dissertation Context
-
-**Title:** Agentic RAG for MLOps Pipeline Documentation and Troubleshooting
-
-**Institution:** Glasgow Caledonian University
-
-**Programme:** MSc Computer Science
-
-**Supervisor:** Ross Crawford
-
-**Target submission:** July 2026
 
 ---
 
