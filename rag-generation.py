@@ -2,17 +2,6 @@ import chromadb
 from sentence_transformers import SentenceTransformer
 import ollama
 
-# Each string is a "document" - a piece of knowledge the system can retrieve.
-documents = [
-    "To restart a Kubernetes pod, use the command: kubectl rollout restart deployment <deployment-name>. This recreates the pods in the deployment.",
-    "To view logs from a Kubernetes pod, use: kubectl logs <pod-name>. Add -f to follow the logs in real time.",
-    "A Docker container that keeps crashing usually has an error in its startup command. Check logs with: docker logs <container-id>.",
-    "To list all running Docker containers, use: docker ps. To include stopped containers, use: docker ps -a.",
-    "Jenkins build failures are often caused by missing environment variables or incorrect pipeline syntax. Check the console output for the specific error.",
-    "To check the status of all pods in a Kubernetes namespace, run: kubectl get pods -n <namespace>."
-]
-
-
 # Load the embedding model
 
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -25,22 +14,12 @@ client = chromadb.PersistentClient(path="./chroma_db")
 collection = client.get_or_create_collection(name="mlops_knowledge_base")
 
 #Embedding the documents and adding them to the collection
-
-# Quick check that our documents loaded
-
-for i, doc in enumerate(documents):
-    embedding = embedding_model.encode(doc).tolist()  # Get the embedding for the document
-    collection.add(
-        ids=[f"doc_{i}"],  # Unique ID for each document
-        embeddings=[embedding],  # The embedding vector
-        documents=[doc]  # The original document
-    )
-    
+print(f"Connected to knowledge base: {collection.count()} chunks available")  
 
 # --- RETRIEVAL ---
 # Take a user question and find the most relevant documents
 
-question = "How do I restart a pod?"
+question = "What is the difference between a namespace and a deployment?"
 
 # Embed the question using the SAME model we used for the documents
 # This is critical - both must be in the same vector space to compare
@@ -84,5 +63,5 @@ response = ollama.chat(model = 'llama3.2', messages=[{"role": "user", "content":
 
 print("=" * 60)
 print("Generated Answer:")
-print("=" * 60)
 print(response['message']['content'])
+print("=" * 60)
