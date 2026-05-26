@@ -11,16 +11,41 @@ print(f"Connected to knowledge base: {collection.count()} chunks available\n")
 
 def should_retrieve(question):
     """
-    Decision 1: Ask the LLM whether this question needs
-    retrieval from the knowledge base or can be answered directly.
+    Hybrid routing: rule-based for obvious cases,
+    LLM-based for ambiguous ones.
     """
-    decision_prompt = f"""You are an MLOps assistant deciding whether to search 
-a documentation knowledge base before answering.
+    question_lower = question.lower()
+    # Rule-based DIRECT: clearly general knowledge questions
+    direct_patterns = [
+        "what is kubernetes",
+        "what is docker", 
+        "what is jenkins",
+        "what is ansible",
+        "what is a container",
+        "what is devops",
+        "what is mlops"
+    ]
+    for pattern in direct_patterns:
+        if pattern in question_lower:
+            print("Routing: Rule-based DIRECT")
+            return False
+    # Rule-based RETRIEVE: clearly needs documentation
+    retrieve_patterns = [
+        "how do i", "how to", "command", "kubectl",
+        "error", "crash", "failing", "not working",
+        "difference between", "compare", "vs ",
+        "configure", "setup", "install", "deploy"
+    ]
+    for pattern in retrieve_patterns:
+        if pattern in question_lower:
+            print("Routing: Rule-based RETRIEVE")
+            return True
+    # Ambiguous: ask the LLM
+    print("Routing: LLM decision")
+    decision_prompt = f"""You are an MLOps assistant. Does this question 
+require searching Kubernetes documentation to answer accurately?
 
 Question: {question}
-
-Does this question require searching technical documentation to answer accurately,
-or is it general knowledge you can answer directly?
 
 Reply with ONLY one word: RETRIEVE or DIRECT"""
 
