@@ -3,6 +3,7 @@
 A local, privacy-first Retrieval-Augmented Generation (RAG) system that helps engineers query MLOps pipeline documentation using natural language. Built as part of an MSc Computer Science dissertation at Glasgow Caledonian University (2026).
 
 > **Status:** Baseline RAG pipeline complete and verified. Agentic layer in active development.
+
 > **Project Board:** Dissertation progress is tracked on the GitHub Project board [View dissertation progress](https://github.com/users/Excel-Adeniyi/projects/5)
 ---
 
