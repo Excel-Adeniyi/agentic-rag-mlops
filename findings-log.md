@@ -18,3 +18,9 @@ Agent Decision 2 - Context sufficient: True
 
 Answer:
 The context does not provide enough information to answer the question. The context only provides general information about namespaces, their usage, and working with them, but it doesn't specifically address the difference between a namespace and a deployment. It mentions that resources can be in one namespace or another, but it doesn't clarify what a deployment is in relation to a namespace.
+
+Finding 5: Scraping better for some document rather than Raw Github URLs
+
+Initial attempts to source Jenkins and Docker documentation via raw GitHub URLs were unsuccessful. The repositories had been restructured and the available files consisted primarily of YAML navigation metadata rather than usable documentation content.
+Web scraping was adopted as an alternative approach using Python's requests and BeautifulSoup4 libraries. Official documentation pages were fetched directly from docs.docker.com and jenkins.io. During scraping, a challenge was encountered whereby the BeautifulSoup parser was extracting sidebar navigation content (div class='sidebar-nav') rather than the main documentation body. This was resolved by explicitly decomposing the sidebar div before content extraction, and targeting the main content container directly.
+The scraped content was saved as markdown files and ingested into ChromaDB using the existing ingestion pipeline. The final knowledge base comprises 12 documentation files across Kubernetes, Docker and Jenkins, producing 719 embedded chunks available for semantic retrieval.
