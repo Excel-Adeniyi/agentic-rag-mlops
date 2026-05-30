@@ -32,3 +32,6 @@ Test 4: Docker logs query. Correct routing but thin answer generation. Retrieval
 Test 5: Jenkins pipeline stuck. Agent incorrectly routed to DIRECT via LLM decision despite being a technical troubleshooting query. Generated plausible but ungrounded answer. Fix: add pipeline-specific keywords to rule-based RETRIEVE patterns.
 
 Test 6: Docker vs Kubernetes comparison. Correct RETRIEVE routing. Honest acknowledgement of knowledge base gap. Cross-tool comparative queries require either curated comparison content or multi-query retrieval.
+
+
+Test 5 (revised): After adding pipeline-specific keywords to rule-based RETRIEVE patterns, the agent now correctly routes the stuck pipeline query to RETRIEVE. However the answer remains weak because the ingested Jenkins documentation does not contain specific troubleshooting content for stuck pipelines. The agent correctly acknowledges this limitation rather than hallucinating. Finding confirms that routing fixes resolve hallucination but cannot compensate for knowledge base gaps.
