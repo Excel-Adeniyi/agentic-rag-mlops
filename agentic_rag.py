@@ -34,7 +34,9 @@ def should_retrieve(question):
         "how do i", "how to", "command", "kubectl",
         "error", "crash", "failing", "not working",
         "difference between", "compare", "vs ",
-        "configure", "setup", "install", "deploy"
+        "configure", "setup", "install", "deploy",
+            "stuck", "pipeline", "jenkins", "docker",
+    "cannot", "unable", "failed", "issue"
     ]
     for pattern in retrieve_patterns:
         if pattern in question_lower:
