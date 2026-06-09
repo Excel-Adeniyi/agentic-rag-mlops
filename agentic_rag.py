@@ -25,6 +25,7 @@ def should_retrieve(question):
         "what is devops",
         "what is mlops"
     ]
+    
     for pattern in direct_patterns:
         if pattern in question_lower:
             print("Routing: Rule-based DIRECT")
@@ -58,6 +59,97 @@ Reply with ONLY one word: RETRIEVE or DIRECT"""
     
     decision = response['message']['content'].strip().upper()
     return "RETRIEVE" in decision
+
+
+
+
+def is_comparative_query(question):
+    """
+    Detect whether a query is comparative and needs multi-query retrieval
+    """
+    question_lower = question.lower()
+    
+    comparative_patterns = [
+        "difference between",
+        "which is better",
+        "better than",
+        " vs ",
+        "versus",
+        "compare",
+        "comparison",
+        "when to use",
+        "should i use",
+        " or ",
+    ]
+    
+    for pattern in comparative_patterns:
+        if pattern in question_lower:
+            print(f"Comparative query detected: '{pattern}' pattern matched")
+            return True
+    
+    return False
+
+
+def decompose_query(question):
+    """
+    Ask Llama 3.2 to break a comparative query into sub-queries
+    """
+    decompose_prompt = f"""You are a Kubernetes documentation assistant. 
+Break this question into exactly 2 sub-queries about Kubernetes concepts.
+Each sub-query must start with "What is a Kubernetes" or "How does Kubernetes".
+Keep each sub-query simple and focused on one concept only.
+
+Question: {question}
+
+Reply with ONLY 2 sub-queries, one per line, nothing else."""
+
+    response = ollama.chat(
+        model='llama3.2',
+        messages=[{'role': 'user', 'content': decompose_prompt}]
+    )
+    
+    sub_queries = response['message']['content'].strip().split('\n')
+    sub_queries = [q.strip() for q in sub_queries if q.strip()]
+    
+    print(f"Decomposed into {len(sub_queries)} sub-queries:")
+    for q in sub_queries:
+        print(f"  - {q}")
+    
+    return sub_queries
+
+
+def multi_query_retrieve(question, n_results=3):
+    """
+    Retrieve separately for each sub-query and combine results
+    """
+    sub_queries = decompose_query(question)
+    
+    all_docs = []
+    all_ids = []
+    all_distances = []
+    
+    for sub_query in sub_queries:
+        embedding = model.encode(sub_query).tolist()
+        results = collection.query(
+            query_embeddings=[embedding],
+            n_results=n_results
+        )
+        
+        for doc, dist, id in zip(
+            results['documents'][0],
+            results['distances'][0],
+            results['ids'][0]
+        ):
+            # Avoid duplicate chunks
+            if id not in all_ids:
+                all_docs.append(doc)
+                all_ids.append(id)
+                all_distances.append(dist)
+    
+    print(f"Multi-query retrieved {len(all_docs)} unique chunks total")
+    return all_docs, all_distances
+
+
 
 def retrieve_context(question, n_results=3):
     """Embed the question and retrieve relevant chunks from ChromaDB"""
@@ -136,9 +228,14 @@ def agentic_rag(question):
         print(f"\nAnswer:\n{answer}\n")
         return answer
     
-    # Retrieve context
-    context, distances = retrieve_context(question)
-    print(f"Retrieved {len(context)} chunks (distances: {[f'{d:.3f}' for d in distances]})")
+    # Check if comparative query needs multi-query retrieval
+    if is_comparative_query(question):
+        print("Using multi-query retrieval for comparative query")
+        context, distances = multi_query_retrieve(question)
+        print(f"Multi-query retrieved {len(context)} chunks")
+    else:
+        context, distances = retrieve_context(question)
+        print(f"Retrieved {len(context)} chunks (distances: {[f'{d:.3f}' for d in distances]})")
     
     # Decision 2: Is context sufficient?
     sufficient = is_context_sufficient(question, context)
@@ -155,23 +252,23 @@ def agentic_rag(question):
     return answer
 
 # Test with your three query types
-print("=" * 60)
-print("TEST 1: General knowledge query")
-print("=" * 60)
-question1 = input("Enter a general knowledge question (e.g. 'What is Kubernetes?'): ")
-agentic_rag(question1)
-# agentic_rag("What is Kubernetes?")
+# print("=" * 60)
+# print("TEST 1: General knowledge query")
+# print("=" * 60)
+# question1 =  'What is Kubernetes?'
+# agentic_rag(question1)
+# # agentic_rag("What is Kubernetes?")
 
-print("=" * 60)
-print("TEST 2: Symptom-based query")
-print("=" * 60)
-question2 = input("Enter a symptom-based question (e.g. 'My pod keeps crashing, what should I do?'): ")
-agentic_rag(question2)
-# agentic_rag("My pod keeps crashing, what should I do?")
+# print("=" * 60)
+# print("TEST 2: Symptom-based query")
+# print("=" * 60)
+# question2 =  'My pod keeps crashing, what should I do?'
+# agentic_rag(question2)
+# # agentic_rag("My pod keeps crashing, what should I do?")
 
 print("=" * 60)
 print("TEST 3: Comparative query")
 print("=" * 60)
-question3 = input("Enter a comparative question (e.g. 'What is the difference between a namespace and a deployment?'): ")
+question3 =  'What is the difference between a namespace and a deployment?' 
 agentic_rag(question3)
 # agentic_rag("What is the difference between a namespace and a deployment?")
