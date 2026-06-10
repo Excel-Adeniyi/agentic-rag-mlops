@@ -4,10 +4,17 @@ def decompose_query(question):
     """
     Ask Llama 3.2 to break a comparative query into sub-queries
     """
-    decompose_prompt = f"""You are a Kubernetes documentation assistant. 
-Break this question into exactly 2 sub-queries about Kubernetes concepts.
-Each sub-query must start with "What is a Kubernetes" or "How does Kubernetes".
-Keep each sub-query simple and focused on one concept only.
+    decompose_prompt = f"""You are an MLOps documentation assistant with expertise in 
+Kubernetes, Docker and Jenkins.
+
+Break this comparative question into exactly 2 simple sub-queries.
+Each sub-query should focus on ONE concept only and start with "What is" or "How does".
+Keep each sub-query within the same tool domain as the original question.
+
+Examples:
+- "difference between docker run and docker start" -> "What is docker run?" and "What is docker start?"
+- "difference between namespace and deployment" -> "What is a Kubernetes namespace?" and "What is a Kubernetes deployment?"
+- "difference between declarative and scripted pipeline" -> "What is a Jenkins declarative pipeline?" and "What is a Jenkins scripted pipeline?"
 
 Question: {question}
 

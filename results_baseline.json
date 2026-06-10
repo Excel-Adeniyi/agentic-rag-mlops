@@ -1,0 +1,182 @@
+[
+  {
+    "query": "What command lists all running pods in Kubernetes?",
+    "ground_truth": "kubectl get pods",
+    "answer": "kubectl get pod -o wide",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "How do I view logs for a Docker container?",
+    "ground_truth": "docker logs <container-id>",
+    "answer": "To view the logs for a Docker container, use the `docker logs` command.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What command checks the status of a Kubernetes deployment?",
+    "ground_truth": "kubectl rollout status deployment/<deployment-name>",
+    "answer": "The command to check the status of a Kubernetes Deployment is:\n\n```shell\nkubectl rollout status\n```\n\nNote that this command will also show you whether the Deployment is in the \"progressing\", \"complete\", or \"failed\" state.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "How do I stop a running Docker container?",
+    "ground_truth": "docker stop <container-id>",
+    "answer": "According to the context, if no custom stop signal is defined in the container image, the default signal of the container runtime (SIGTERM for both containerd and CRI-O) would be used to kill the container. There is no mention of how to explicitly stop a running Docker container using a command or flag.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What is the default port Jenkins runs on?",
+    "ground_truth": "Port 8080",
+    "answer": "The context does not provide information about the default port that Jenkins runs on. The provided text only discusses configuration options, credential providers, and users management in Jenkins, without mentioning port settings.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "How do I list all Kubernetes namespaces?",
+    "ground_truth": "kubectl get namespaces",
+    "answer": "You can list all Kubernetes namespaces using:\n\n```shell\nkubectl get namespaces\n```\n\nThis command will show you a list of all namespaces in your cluster, excluding the reserved `kube-` prefix.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What command pulls a Docker image from a registry?",
+    "ground_truth": "docker pull <image-name>",
+    "answer": "The commands that pull a Docker image from a registry are:\n\n1. `docker pull`\n2. `docker run`\n\nBoth of these commands will pull the required images from your configured registry if you don't have them locally.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "How do I restart a Kubernetes deployment?",
+    "ground_truth": "kubectl rollout restart deployment/<deployment-name>",
+    "answer": "There is no information provided about restarting a Kubernetes deployment. The context only discusses pausing and resuming Deployment rollouts, as well as getting Deployment details, but does not mention restarting a Deployment.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What command shows all Docker images on my machine?",
+    "ground_truth": "docker images",
+    "answer": "The command `$ docker images` or `$ docker images -a` (for all images) would show you the list of Docker images on your machine, but I do not see that in your prompt.\n\nHowever if you use `docker hub login` then you can use `docker images` command to show the list of Docker Hub repositories and their tags.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "How do I delete a Kubernetes pod?",
+    "ground_truth": "kubectl delete pod <pod-name>",
+    "answer": "According to the context, to delete a Kubernetes Pod using `kubectl`, you can use the following command:\n\n```bash\nkubectl delete --grace-period=<seconds> <Pod_Name>\n```\n\nReplace `<Pod_Name>` with the actual name of the Pod you want to delete.\n\nNote that by default, all deletes are graceful within 30 seconds. You can override this default by specifying a custom grace period using the `--grace-period` option.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "My pod keeps crashing, what should I do?",
+    "ground_truth": "Check logs using kubectl logs <pod-name> and inspect events using kubectl describe pod <pod-name> to identify the root cause",
+    "answer": "To investigate the root cause of a `CrashLoopBackOff` issue, you can try checking the logs of the container using `kubectl logs <name-of-pod>`, inspecting events with `kubectl describe pod <name-of-pod>`, and reviewing configuration. However, since your pod is running but not doing what you expected, it's possible that there was an error in your pod description file (`mypod.yaml`) that was silently ignored when you created the pod.\n\nIn this case, try re-checking the pod description to ensure everything is correct.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "My Docker container exits immediately after starting, what is wrong?",
+    "ground_truth": "Check container logs using docker logs <container-id> to identify the error causing the immediate exit",
+    "answer": "Based on the context provided, it seems that you're experiencing a container that exits immediately after starting.\n\nThe relevant information here comes from the sections describing exit codes 126. \n\nAccording to this section, an exit code of 126 indicates that the specified container command can be used to container to exit. In other words, the container is being terminated intentionally due to the reason provided in the command line options, such as a signal or a request to terminate.\n\nIn your case, you're using `$docker run --foo busybox;echo $?` which does not appear to terminate the container immediately after starting (in fact, it's quite the opposite - the container is not shown to have started at all).\n\nLooking closer, the actual issue seems to be that the command provided in the `docker run` line contains an error. \n\nIn this case, you see:\n```\nflag provided but not defined: --foo\nSee 'docker run --help'.\n125\n```\n\nThis suggests that there is a flag named `-foo` which does not exist. This seems like it might be a logical reason for why the container started but then immediately terminated.\n\nBased on the information given, I would recommend checking your command line options and ensuring that they are valid to avoid this issue.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "My Kubernetes deployment is not updating after I made changes, what should I do?",
+    "ground_truth": "Use kubectl rollout restart deployment/<name> to force a new rollout or check rollout status with kubectl rollout status deployment/<name>",
+    "answer": "The answer cannot be determined from the provided context. The question asks about a Deployment that is not updating, but the context does not provide enough information to diagnose or solve this issue. It only provides general information about Deployments, rollbacks, and troubleshooting steps, but no specific details about your problem.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "My Jenkins pipeline is failing but I do not know why, how do I investigate?",
+    "ground_truth": "Check the Jenkins console output by clicking the build number and selecting Console Output to find the specific error",
+    "answer": "To investigate why your Jenkins pipeline is failing, you should:\n\n1. Check the `Jenkinsfile` for any syntax errors or invalid Groovy code.\n2. Look at the Pipeline console output to see if there are any error messages that can give a clue about what's going wrong.\n3. Inspect the `errorStream` to get more detailed information about the failure, such as the stacktrace.\n4. Check the `definition` field in the pipeline section of your Jenkinsfile to ensure it is set to the correct pipeline script option (either \"Declarative\" or \"Scripted\").\n5. Verify that the `timeout` option is set correctly to give the pipeline enough time to complete successfully.\n\nIf you are using the `try/catch/finally` blocks in Groovy, as shown in the example, make sure that the error handling code is correct and properly throws exceptions.\n\nAlso, check if there are any other stages or steps in your pipeline that might be causing the failure.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "My Kubernetes pod is stuck in pending state, what should I do?",
+    "ground_truth": "Use kubectl describe pod <pod-name> to check events and identify whether the issue is insufficient resources or scheduling constraints",
+    "answer": "If your Kubernetes pod is stuck in the \"Pending\" state, it means that it cannot be scheduled onto a node due to insufficient resources. To resolve this issue, you can use the `kubectl describe` command to examine the scheduler messages and identify the root cause.\n\nTry the three things mentioned in the debugging section:\n\n1. Ensure that the image name is correct.\n2. Verify that the image has been pushed to the registry.\n3. Manually pull the image using Docker on your PC (e.g., `docker pull <image>`).\n\nIf none of these steps resolve the issue, continue debugging and examine the pod's configuration and environment for any other potential causes.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "I cannot connect to my Docker container from outside, what is wrong?",
+    "ground_truth": "Check that the container port is correctly mapped to the host using docker ps and verify the port mapping with -p flag",
+    "answer": "Based on the provided context, it seems that ports of containers on bridge networks are not accessible from outside the host or other containers in different networks by default.\n\nTo make a port available outside the host and to containers in other bridge networks, you need to use the `--publish` or `-p` flag when running the container with `docker run`. This flag allows you to specify which ports to map from the container to the host.\n\nFor example, if you want to expose port 80 inside the container to be accessible on the host, you would use:\n\n```\ndocker run -p 42800:80\n```\n\nThis tells Docker to map port 42800 on the host to port 80 in the container.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "My Kubernetes nodes are not ready, how do I investigate?",
+    "ground_truth": "Use kubectl get nodes to check node status and kubectl describe node <node-name> to see events and conditions",
+    "answer": "To investigate why your Kubernetes nodes are not ready, you can follow these steps:\n\n1. Check if the kubelet restart behavior is set to legacy mode by checking the feature gate setting in your cluster. If it's enabled, this could be causing the issue.\n2. Verify that the node is experiencing issues and has failed a series of node heartbeats checks.\n3. Wait for a while before starting the kubelet again.\n4. Check the status of individual containers within Pods on that Node.\n\nHowever, based on the provided context, it seems that even though Pod evictions begin to happen, Kubernetes does not mark the individual containers in those Pods as `ready: false`. The control plane might taint the node as `node.kubernetes.io/not-ready` due to failed heartbeats, but it's unlikely to change the container status.\n\nIt appears that I couldn't determine the exact solution using only the provided context.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "My Docker image build is failing, what should I check?",
+    "ground_truth": "Check the Dockerfile for syntax errors and verify all referenced files exist. Review the build output for the specific step that failed",
+    "answer": "If your Docker image build is failing, you should check the following:\n\n1. **Incorrectly specified working directory**: Ensure that you haven't set an incorrect default working directory in your `Dockerfile` or used an invalid path in the `docker run` command.\n2. **Missing or invalid instructions**: Verify that all required instructions are present and valid in your `Dockerfile`. Check for syntax errors, missing steps, or incorrect instruction order.\n3. **Incompatible dependencies**: If you're using external dependencies (e.g., libraries, frameworks), ensure they are compatible with the Docker image's architecture and version.\n4. **Incorrect layer ordering**: Ensure that the layers in your `Dockerfile` are ordered correctly. Out-of-order layers can cause build failures.\n5. **Missing or incorrect FROM instruction**: Verify that you've specified a valid base image using the `FROM` instruction.\n6. **Insufficient permissions**: Check that your user has the necessary permissions to access and modify the files and directories required for the Docker build process.\n\nIf none of these potential issues resolve the problem, provide more details about your `Dockerfile`, build command, and error messages to help identify the root cause.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "My Jenkins build works locally but fails in the pipeline, what should I check?",
+    "ground_truth": "Check environment variables and tool versions on the Jenkins agent using sh env in your pipeline to print all environment variables",
+    "answer": "A common issue!\n\nIf your Jenkins build works locally but fails in the pipeline, here are some things you should check:\n\n1. **Pipeline code**: Double-check that the pipeline code is correct and matches the one you used locally.\n2. **Credentials configuration**: Verify that you have correctly configured the credentials for the pipeline, including the SSH key file location and the MYVARNAME_USR and MYVARNAME_PSW environment variables.\n3. **Pipeline script option**: Ensure that the Pipeline script option is set to \"Pipeline\" in both the Jenkinsfile and the Pipelines section of your project.\n4. **Binding handler**: Check that the binding handler for the credentials type used in the pipeline is correctly configured and supported by Jenkins.\n5. **Environment variables**: Verify that the MYVARNAME_USR and MYVARNAME_PSW environment variables are being set correctly in the pipeline.\n\nIf you're still having issues, check the Jenkins logs for more detailed information about what's going wrong.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "My Kubernetes deployment has zero available pods, what is wrong?",
+    "ground_truth": "Use kubectl get pods to check pod status and kubectl describe deployment <name> to check deployment conditions and events",
+    "answer": "Based on the provided context, it seems that you're experiencing a situation where your Deployment has zero available pods. There are a few possible reasons for this:\n\n1. The new ReplicaSet is not yet created or rolled out to the nodes, and only the old ReplicaSet with 0 replicas is active.\n2. The old ReplicaSet is being scaled down to 0, but it's taking some time to complete.\n\nHowever, the most likely reason based on the context is that there might be pods in a terminating state due to exceeding the quota of object-counts (in this case, pods). This can cause the availableReplicas to be incorrectly calculated by Kubernetes.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What is the difference between a namespace and a deployment in Kubernetes?",
+    "ground_truth": "A namespace provides a scope for resource names and isolates resources between teams or projects. A deployment manages the desired state and rollout of application pods ensuring the correct number of replicas are running",
+    "answer": "A namespace and a deployment are two different entities in Kubernetes.\n\nA namespace is a logical grouping of resources, used to organize them and provide a scope for names. It's a way to divide cluster resources between multiple users or teams.\n\nA deployment, on the other hand, is a managed replica set for an application running in a pod. It represents a specific instance of an application that is being deployed and managed by Kubernetes. A deployment can exist within a namespace, but it's not a namespace itself.\n\nIn summary, a namespace provides a way to group resources together, while a deployment provides a specific instance of an application that runs within those resources.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What is the difference between a pod and a container in Kubernetes?",
+    "ground_truth": "A container is a single running process. A pod is the smallest deployable unit in Kubernetes and can contain one or more containers that share network and storage resources",
+    "answer": "Based on the provided context, it can be inferred that there is no direct answer to the question. The context describes the management of Pods by the kubelet, including creating sandboxes, networking configuration, storage volumes mounting, and allocating dynamic resources for Pods.\n\nHowever, the context does mention \"container\" in relation to Pods, but it primarily focuses on the lifecycle and management of Pods themselves rather than providing a clear definition or distinction between a Pod and a container.\n\nTherefore, I must admit that the provided context doesn't explicitly answer the question about the difference between a pod and a container.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What is the difference between docker run and docker start?",
+    "ground_truth": "docker run creates and starts a new container from an image. docker start restarts an existing stopped container without creating a new one",
+    "answer": "The context provided does not mention \"docker start\" in relation to \"docker run\". The section on general form of the docker run command does provide an example where -i and -t flags are used together, but it does not specify the difference between running a container with these flags versus starting one. It is assumed that \"docker start\" might refer to building (start) the Docker image instead of running the container, as there is no other option available within this context to clarify the difference between docker run and docker start commands.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What is the difference between a Kubernetes deployment and a statefulset?",
+    "ground_truth": "A deployment manages stateless applications where pods are interchangeable. A statefulset manages stateful applications where each pod has a persistent identity and stable storage",
+    "answer": "Unfortunately, the context provided does not contain enough information to answer this question. The context only discusses Deployments, their characteristics, and how to manage them, but it does not compare or contrast them with StateSets directly.\n\nTo answer this question accurately, additional context or information about StateSets would be necessary.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What is the difference between docker copy and docker volume?",
+    "ground_truth": "docker copy transfers files between a container and the host at a specific point in time. A volume provides persistent shared storage that persists beyond the container lifecycle",
+    "answer": "According to the provided context, there is no explicit information about `docker copy` or its differences with `docker volume`. The context only discusses Docker volumes, their creation, and usage. Therefore, I must honestly say that I don't have enough information to answer this question accurately.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What is the difference between a Jenkins declarative and scripted pipeline?",
+    "ground_truth": "A declarative pipeline uses a structured predefined syntax that is easier to read and validate. A scripted pipeline uses Groovy code giving more flexibility but requiring more expertise",
+    "answer": "The question does not provide enough information to determine the exact differences between a Jenkins declarative and scripted pipeline. It only provides some general context about the two types of pipelines, but it does not specifically address their differences or pros and cons.\n\nHowever, according to the provided context, you can refer to the comparison mentioned in the text for more information on the differences between Declarative and Scripted Pipeline syntax.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What is the difference between kubectl apply and kubectl create?",
+    "ground_truth": "kubectl create creates a new resource and fails if it already exists. kubectl apply creates or updates a resource and is idempotent making it better for declarative configuration management",
+    "answer": "The context does not provide enough information to answer the question about the difference between `kubectl apply` and `kubectl create`. The provided text only explains what `kubectl apply` manages and how Kubernetes manifests can be defined, but it does not explicitly compare or contrast `apply` with `create`.\n\nTo determine the difference, you would need additional context or information from other sources.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What is the difference between a Kubernetes service and an ingress?",
+    "ground_truth": "A service exposes pods internally within the cluster or externally on a specific port. An ingress manages external HTTP and HTTPS routing to multiple services based on rules",
+    "answer": "The question cannot be answered based on the provided context. The context only discusses Kubernetes concepts such as Pods, namespaces, services, and controllers, but does not mention Ingress resources or their differences with Services.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What is the difference between docker compose and Kubernetes?",
+    "ground_truth": "Docker Compose defines and runs multi-container applications on a single host for development. Kubernetes orchestrates containers across multiple nodes in production with scaling, self-healing and service discovery",
+    "answer": "Unfortunately, the context does not provide a clear answer to this question.\n\nHowever, I can try to make an educated guess based on general knowledge. Docker Compose and Kubernetes are both tools used for container orchestration, but they serve different purposes and have different design goals.\n\nDocker Compose is a tool that allows you to define and run multi-container Docker applications with a single command. It provides a convenient way to manage multiple containers and services within a single YAML file. Its primary focus is on simplifying the development, deployment, and management of containerized applications.\n\nKubernetes, on the other hand, is a more comprehensive platform for deploying, scaling, and managing containerized applications. It provides a wide range of features such as service discovery, load balancing, self-healing, and resource management. Kubernetes is designed to be highly scalable and fault-tolerant, making it suitable for large-scale enterprise environments.\n\nWhile Docker Compose can be used to run simple, multi-container applications, it may not provide the level of complexity and scalability that Kubernetes offers. Conversely, Kubernetes can be more complex and resource-intensive than Docker Compose, requiring more expertise and infrastructure to deploy and manage.\n\nWithout further information or context, it's difficult to provide a more definitive answer.",
+    "pipeline": "baseline"
+  },
+  {
+    "query": "What is the difference between a Jenkins stage and a step?",
+    "ground_truth": "A stage groups related steps together and appears as a distinct block in the Jenkins UI. A step is an individual command or action within a stage such as running a shell command or checking out code",
+    "answer": "The context does not explicitly state the difference between a Jenkins stage and a step. However, it is implied that both stages and steps are part of Pipeline syntax.\n\nBased on the provided information, it can be inferred that stages provide a way to group related steps together, while steps themselves represent individual actions that need to be performed in the pipeline.",
+    "pipeline": "baseline"
+  }
+]
