@@ -3,11 +3,7 @@ import chromadb
 from sentence_transformers import SentenceTransformer
 
 # Configuration
-DOCS_DIR = "./docs"  # Directory containing your documents
-CHUNK_SIZE = 500  # Number of characters per chunk
-CHUNK_OVERLAP = 50  # Number of characters to overlap between chunks
-BATCH_SIZE = 50   # Adjust based on your memory constraints
-
+from components.config import  CHUNK_SIZE, CHUNK_OVERLAP, BATCH_SIZE, DOCS_DIR
 def chunk_text(text, chunk_size, overlap):
     """Split text into chunks with specified size and overlap."""
     chunks = []
