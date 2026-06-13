@@ -1,21 +1,28 @@
-# evaluate.py
-# Scores pipeline results using Ragas with local Qwen model via Ollama
-
 import json
 from datasets import Dataset
 from ragas import evaluate
 from ragas.metrics import faithfulness, answer_relevancy, context_precision
 from ragas.llms import LangchainLLMWrapper
 from ragas.embeddings import LangchainEmbeddingsWrapper
-from langchain_community.llms import Ollama
-from langchain_community.embeddings import OllamaEmbeddings
+from ragas.run_config import RunConfig
+from langchain_community.chat_models import ChatOllama
+from langchain_community.embeddings import HuggingFaceEmbeddings as OllamaEmbeddings
 
-# Configure local LLM and embeddings using Ollama
-llm = LangchainLLMWrapper(Ollama(model="qwen2.5",     
-                                 timeout=300,        # 5 minutes per request
-    num_ctx=4096        # context window size
+# Force sequential processing with long timeout
+run_config = RunConfig(
+    max_workers=1,
+    timeout=300
+)
+
+llm = LangchainLLMWrapper(ChatOllama(
+    model="qwen2.5",
+    timeout=300,
+    num_ctx=4096
 ))
-embeddings = LangchainEmbeddingsWrapper(OllamaEmbeddings(model="qwen2.5"))
+
+embeddings = LangchainEmbeddingsWrapper(OllamaEmbeddings(
+   model_name="all-MiniLM-L6-v2"
+))
 
 def load_results(filepath):
     with open(filepath, 'r') as f:
@@ -49,7 +56,9 @@ def score_pipeline(results_file, pipeline_name):
         dataset,
         metrics=[faithfulness, answer_relevancy, context_precision],
         llm=llm,
-        embeddings=embeddings
+        embeddings=embeddings,
+        run_config=run_config,
+        raise_exceptions=False
     )
 
     print(f"\n{pipeline_name} Scores:")
