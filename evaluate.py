@@ -1,46 +1,9 @@
 import json
-from datasets import Dataset
-from ragas import evaluate
-from ragas.metrics import faithfulness, answer_relevancy, context_precision
-from ragas.llms import LangchainLLMWrapper
-from ragas.embeddings import LangchainEmbeddingsWrapper
-from ragas.run_config import RunConfig
-from langchain_community.chat_models import ChatOllama
-from langchain_community.embeddings import HuggingFaceEmbeddings as OllamaEmbeddings
-
-# Force sequential processing with long timeout
-run_config = RunConfig(
-    max_workers=1,
-    timeout=300
+from application.evaluation_core import (
+    build_results_dataset,
+    load_results,
+    run_ragas_evaluation,
 )
-
-llm = LangchainLLMWrapper(ChatOllama(
-    model="qwen2.5",
-    timeout=300,
-    num_ctx=4096
-))
-
-embeddings = LangchainEmbeddingsWrapper(OllamaEmbeddings(
-   model_name="all-MiniLM-L6-v2"
-))
-
-def load_results(filepath):
-    with open(filepath, 'r') as f:
-        return json.load(f)
-
-def prepare_dataset(results):
-    data = {
-        "question": [],
-        "answer": [],
-        "contexts": [],
-        "ground_truth": []
-    }
-    for item in results:
-        data["question"].append(item["query"])
-        data["answer"].append(item["answer"])
-        data["contexts"].append([item.get("context", item["answer"])])
-        data["ground_truth"].append(item["ground_truth"])
-    return Dataset.from_dict(data)
 
 def score_pipeline(results_file, pipeline_name):
     print(f"\n{'='*60}")
@@ -50,16 +13,8 @@ def score_pipeline(results_file, pipeline_name):
     results = load_results(results_file)
     print(f"Loaded {len(results)} results")
 
-    dataset = prepare_dataset(results)
-
-    scores = evaluate(
-        dataset,
-        metrics=[faithfulness, answer_relevancy, context_precision],
-        llm=llm,
-        embeddings=embeddings,
-        run_config=run_config,
-        raise_exceptions=False
-    )
+    dataset = build_results_dataset(results)
+    scores = run_ragas_evaluation(dataset)
 
     print(f"\n{pipeline_name} Scores:")
     print(scores)
