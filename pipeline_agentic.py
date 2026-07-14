@@ -3,8 +3,9 @@ from components import (
     is_comparative_query, 
     multi_query_retrieve, 
     retrieve_context, 
+    is_meta_question,
     is_context_sufficient, 
-    generate_answer, 
+    generate_answer,
     collection
 )
 
@@ -14,6 +15,9 @@ def agentic_rag(question):
     1. Pre-retrieval routing (retrieve or direct)
     2. Post-retrieval context evaluation (sufficient or insufficient)
     """
+    if is_meta_question(question):
+        return generate_answer(question)
+    
     needs_retrieval = should_retrieve(question)
     
     if not needs_retrieval:

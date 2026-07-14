@@ -1,5 +1,8 @@
 import os
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+os.environ["HF_HUB_OFFLINE"] = "1"
+os.environ["TRANSFORMERS_OFFLINE"] = "1"
+
 
 import streamlit as st
 from application import build_default_app_service

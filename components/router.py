@@ -5,6 +5,32 @@ from components import LLM_MODEL, llm_client
 - Is it a comparative query that needs decomposition?
 - Should we retrieve from the knowledge base or answer directly?
 """
+def is_meta_question(question):
+    """
+    Detect questions about the system's own scope, training data,
+    or capabilities rather than actual MLOps troubleshooting queries.
+    """
+    question_lower = question.lower()
+    
+    meta_patterns = [
+   "what can you help",
+    "what tool can you help",
+    "mlops tool can you help",
+    "what are you trained on",
+    "what data are you trained",
+    "what can you do",
+    "what do you know",
+    "what are your capabilities",
+    "what topics can you",
+    "what can you assist",
+    "which tool can you",
+    "help me with"
+    ]
+    
+    for pattern in meta_patterns:
+        if pattern in question_lower:
+            return True
+    return False
 
 def is_comparative_query(question):
     """
@@ -57,6 +83,16 @@ def should_retrieve(question):
     """
     question_lower = question.lower()
 
+    # Handle greetings and conversational messages first
+    conversational_patterns = [
+        "hello", "hi", "hey", "how are you", "thanks", 
+        "thank you", "good morning", "good afternoon", 
+        "greeting", "what's up", "yo"
+    ]
+    if any(question_lower.startswith(p) or question_lower == p for p in conversational_patterns):
+        print("Routing: Rule-based DIRECT (conversational)")
+        return False
+    
     # Rule-based RETRIEVE: clearly needs documentation
     retrieve_patterns = [
         "how do i", "how to", "command", "kubectl",
