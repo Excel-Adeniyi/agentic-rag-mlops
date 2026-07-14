@@ -4,6 +4,10 @@ from application.evaluation_core import (
     load_results,
     run_ragas_evaluation,
 )
+import os
+os.environ["HF_HUB_OFFLINE"] = "1"
+os.environ["TRANSFORMERS_OFFLINE"] = "1"
+
 
 def score_pipeline(results_file, pipeline_name):
     print(f"\n{'='*60}")

@@ -1,6 +1,19 @@
-from components import LLM_MODEL, llm_client
+from components import LLM_MODEL, llm_client, is_meta_question
+
+SCOPE_RESPONSE = """I am an MLOps documentation assistant specialising in three tools: 
+Kubernetes, Docker and Jenkins. I can help with:
+- Kubernetes: pod management, deployments, namespaces, troubleshooting
+- Docker: container commands, networking, image management
+- Jenkins: pipeline configuration, CI/CD troubleshooting
+
+I do not have documentation for other MLOps tools such as cloud platforms, 
+model serving frameworks, or CI/CD alternatives outside Jenkins."""
 
 def generate_answer(question, context=None):
+
+    if is_meta_question(question):
+        return SCOPE_RESPONSE
+    
     """Generate a final answer, with or without context"""
     if context:
         prompt = f"""You are an expert MLOps assistant. 
