@@ -3,7 +3,7 @@ import chromadb
 from sentence_transformers import SentenceTransformer
 
 # Configuration
-from components.config import  CHUNK_SIZE, CHUNK_OVERLAP, BATCH_SIZE, DOCS_DIR
+from components.config.constants import CHUNK_SIZE, CHUNK_OVERLAP, BATCH_SIZE, DOCS_DIR
 def chunk_text(text, chunk_size, overlap):
     """Split text into chunks with specified size and overlap."""
     chunks = []

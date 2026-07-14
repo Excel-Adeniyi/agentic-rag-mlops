@@ -35,3 +35,26 @@ Test 6: Docker vs Kubernetes comparison. Correct RETRIEVE routing. Honest acknow
 
 
 Test 5 (revised): After adding pipeline-specific keywords to rule-based RETRIEVE patterns, the agent now correctly routes the stuck pipeline query to RETRIEVE. However the answer remains weak because the ingested Jenkins documentation does not contain specific troubleshooting content for stuck pipelines. The agent correctly acknowledges this limitation rather than hallucinating. Finding confirms that routing fixes resolve hallucination but cannot compensate for knowledge base gaps.
+
+
+============================================================
+Finding 6: Knowledge Base Gap — Docker Container Lifecycle Commands
+Date: 03/07/2026
+Query: "How do I restart my Docker container?"
+============================================================
+
+System behaviour: Routing correctly triggered RETRIEVE (matched "docker" keyword). Query expansion generated 3 documentation-style search variants. ChromaDB query failed at retrieval with ValueError — "ids" is not a valid value for the ChromaDB include parameter. Fixed by removing "ids" from the include list (ChromaDB always returns ids and does not allow them to be requested explicitly).
+
+After fixing the ChromaDB error, the system retrieved context but returned a weak or unhelpful answer because no ingested document covered docker restart, docker stop, or docker start.
+
+Root cause: The original knowledge base contained docs for docker run (how to create and run a new container) but nothing about managing the lifecycle of an existing container. The commands docker restart, docker stop, docker start, docker kill, docker pause, and docker rm were absent from all 12 ingested documents.
+
+Fix applied (two parts):
+
+1. Created docs/docker_container_management.md — a curated reference document covering the full container lifecycle: docker restart, docker stop, docker start, docker kill, docker pause/unpause, docker rm, restart policies (--restart flag), and common workflows including restarting by name/ID, stopping all containers, and viewing logs after restart.
+
+2. Re-ingested all docs into ChromaDB by running utility/inject_docs.py. Also fixed a pre-existing bug in inject_docs.py where it imported from components.config (a package with no __init__.py exports) rather than the correct submodule components.config.constants. Knowledge base grew from 719 to 730 chunks (11 new chunks from the container management doc).
+
+Also fixed (same session): the routing logic in components/router.py had a substring-matching bug where direct_patterns like "what is kubernetes" would match sub-concept questions like "what is a kubernetes namespace", incorrectly routing them as DIRECT and skipping retrieval. Fixed by: (a) checking retrieve_patterns before direct_patterns, (b) adding "kubernetes", "pod", "namespace", "container" etc. to retrieve_patterns, and (c) replacing the broad substring match for direct_patterns with a regex that only matches bare top-level tool definition questions ("what is kubernetes" with nothing following).
+
+Analysis: This finding illustrates a second class of knowledge base gap — missing command coverage rather than missing comparison coverage (cf. Finding 4). The system cannot answer what is not indexed. The correct response when encountering this is to source and ingest targeted documentation rather than altering pipeline logic. The RAG architecture is validated: once the correct document was added, no pipeline changes were required for the system to answer the query correctly.
