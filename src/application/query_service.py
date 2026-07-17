@@ -119,12 +119,12 @@ class AppService:
 
     def _get_pipeline(self, mode):
         if mode == "Agentic RAG":
-            from pipeline_agentic import agentic_rag
+            from pipeline.pipeline_agentic import agentic_rag
 
             return agentic_rag
 
         if mode == "Baseline RAG":
-            from pipeline_baseline import baseline_rag
+            from pipeline.pipeline_baseline import baseline_rag
 
             return baseline_rag
 

@@ -1,7 +1,15 @@
+import sys
+from pathlib import Path
+
+_ROOT = Path(__file__).resolve().parent.parent
+for _p in (_ROOT, _ROOT / "src"):
+    if str(_p) not in sys.path:
+        sys.path.insert(0, str(_p))
+
 import json
-from question_pool import ALL_QUERIES
-from pipeline_baseline import baseline_rag
-from pipeline_agentic import agentic_rag
+from pipeline.question_pool import ALL_QUERIES
+from pipeline.pipeline_baseline import baseline_rag
+from pipeline.pipeline_agentic import agentic_rag
 from components.evaluator_runner import run_evaluation
 
 if __name__ == "__main__":
