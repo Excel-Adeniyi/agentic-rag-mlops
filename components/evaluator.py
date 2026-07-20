@@ -22,7 +22,8 @@ Reply with ONLY one word: SUFFICIENT or INSUFFICIENT"""
 
     response = llm_client.chat(
         model=LLM_MODEL,
-        messages=[{'role': 'user', 'content': evaluation_prompt}]
+        messages=[{'role': 'user', 'content': evaluation_prompt}],
+        options={'temperature': 0}
     )
     
     decision = response['message']['content'].strip().upper()

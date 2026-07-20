@@ -3,6 +3,13 @@ os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 os.environ["HF_HUB_OFFLINE"] = "1"
 os.environ["TRANSFORMERS_OFFLINE"] = "1"
 
+import sys
+from pathlib import Path
+
+_ROOT = Path(__file__).resolve().parent.parent
+for _p in (_ROOT, _ROOT / "src"):
+    if str(_p) not in sys.path:
+        sys.path.insert(0, str(_p))
 
 import streamlit as st
 from application import build_default_app_service

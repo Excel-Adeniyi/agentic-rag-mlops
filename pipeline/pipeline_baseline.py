@@ -15,4 +15,4 @@ def baseline_rag(question):
     """
     context, distances = retrieve_context(question)
     answer = generate_answer(question, context=context)
-    return answer
+    return answer, context

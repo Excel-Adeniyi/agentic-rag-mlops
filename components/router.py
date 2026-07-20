@@ -125,7 +125,8 @@ Reply with ONLY one word: RETRIEVE or DIRECT"""
 
     response = llm_client.chat(
         model=LLM_MODEL,
-        messages=[{'role': 'user', 'content': decision_prompt}]
+        messages=[{'role': 'user', 'content': decision_prompt}],
+        options={'temperature': 0}
     )
 
     decision = response['message']['content'].strip().upper()

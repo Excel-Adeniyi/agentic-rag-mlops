@@ -2,10 +2,23 @@ from components import collection, model, decompose_query, expand_query
 
 
 def retrieve_context(question, n_results=3):
+    """Embed the question and retrieve relevant chunks from ChromaDB"""
+    question_embedding = model.encode(question).tolist()
+    results = collection.query(
+        query_embeddings=[question_embedding],
+        n_results=n_results
+    )
+    return results['documents'][0], results['distances'][0]
+
+
+def retrieve_context_expanded(question, n_results=3):
     """
-    Retrieve relevant chunks using query expansion.
-    Rewrites the user query into documentation-style variants before embedding,
-    so natural language like 'how to restart docker container' finds the right docs.
+    Retrieve using query expansion: rewrites the user query into documentation-style
+    variants before embedding, so natural language like 'how to restart docker
+    container' finds the right docs. Used as a fallback when plain retrieval
+    (retrieve_context) doesn't return sufficient context, since blending in
+    LLM-rewritten variants can pull in off-topic chunks for queries that already
+    match well on their own.
     """
     variants = expand_query(question)
     # Always include the original query

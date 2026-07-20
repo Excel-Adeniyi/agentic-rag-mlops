@@ -26,11 +26,12 @@ def run_evaluation(pipeline_fn, pipeline_name, queries):
         print(f"Query {i}/{total}: {item['query'][:50]}...")
         
         try:
-            answer = pipeline_fn(item['query'])
+            answer, context = pipeline_fn(item['query'])
             results.append({
                 "query": item['query'],
                 "ground_truth": item['ground_truth'],
                 "answer": answer,
+                "context": list(context),
                 "pipeline": pipeline_name
             })
         except Exception as e:
@@ -39,6 +40,7 @@ def run_evaluation(pipeline_fn, pipeline_name, queries):
                 "query": item['query'],
                 "ground_truth": item['ground_truth'],
                 "answer": f"ERROR: {str(e)}",
+                "context": [],
                 "pipeline": pipeline_name
             })
 

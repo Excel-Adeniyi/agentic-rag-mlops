@@ -36,6 +36,7 @@ Answer:"""
 
     response = llm_client.chat(
         model=LLM_MODEL,
-        messages=[{'role': 'user', 'content': prompt}]
+        messages=[{'role': 'user', 'content': prompt}],
+        options={'temperature': 0}
     )
     return response['message']['content']
