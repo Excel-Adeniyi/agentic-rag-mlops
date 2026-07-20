@@ -44,6 +44,7 @@ def run_ragas_evaluation(dataset):
             model="qwen2.5",
             timeout=300,
             num_ctx=8192,
+            temperature=0,
         )
     )
     embeddings = LangchainEmbeddingsWrapper(
