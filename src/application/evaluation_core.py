@@ -32,7 +32,7 @@ def build_results_dataset(results):
     for item in results:
         data["question"].append(item["query"])
         data["answer"].append(item["answer"])
-        data["contexts"].append([item.get("context", item["answer"])])
+        data["contexts"].append(item.get("context") or [""])
         data["ground_truth"].append(item["ground_truth"])
 
     return Dataset.from_dict(data)
@@ -44,6 +44,7 @@ def run_ragas_evaluation(dataset):
             model="qwen2.5",
             timeout=300,
             num_ctx=8192,
+            temperature=0,
         )
     )
     embeddings = LangchainEmbeddingsWrapper(

@@ -22,6 +22,7 @@ Reply with ONLY 3 search queries, one per line, nothing else."""
     response = llm_client.chat(
         model=LLM_MODEL,
         messages=[{"role": "user", "content": prompt}],
+        options={'temperature': 0}
     )
 
     queries = [q.strip() for q in response["message"]["content"].strip().split("\n") if q.strip()]
@@ -51,7 +52,8 @@ Reply with ONLY 2 sub-queries, one per line, nothing else."""
 
     response = llm_client.chat(
         model=LLM_MODEL,
-        messages=[{'role': 'user', 'content': decompose_prompt}]
+        messages=[{'role': 'user', 'content': decompose_prompt}],
+        options={'temperature': 0}
     )
     
     sub_queries = response['message']['content'].strip().split('\n')

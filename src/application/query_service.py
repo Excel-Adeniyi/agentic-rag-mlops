@@ -68,9 +68,8 @@ class AppService:
 
     def run_query(self, mode, query, run_eval=False):
         if mode == "Compare Both":
-            contexts = self._get_context(query) if run_eval else None
-            baseline = self._run_pipeline("Baseline RAG", query, contexts, run_eval)
-            agentic = self._run_pipeline("Agentic RAG", query, contexts, run_eval)
+            baseline = self._run_pipeline("Baseline RAG", query, run_eval)
+            agentic = self._run_pipeline("Agentic RAG", query, run_eval)
             return {
                 "mode": mode,
                 "baseline": baseline,
@@ -79,21 +78,18 @@ class AppService:
 
         return {
             "mode": mode,
-            "result": self._run_pipeline(mode, query, None, run_eval),
+            "result": self._run_pipeline(mode, query, run_eval),
         }
 
-    def _run_pipeline(self, mode, query, contexts, run_eval):
+    def _run_pipeline(self, mode, query, run_eval):
         pipeline_fn = self._get_pipeline(mode)
         start = time.time()
-        answer = pipeline_fn(query)
+        answer, context = pipeline_fn(query)
         response_time = time.time() - start
         result = PipelineResult(answer=answer, response_time=response_time)
 
         if not run_eval:
             return result
-
-        if contexts is None:
-            contexts = self._get_context(query)
 
         evaluator = self._get_evaluator()
         if evaluator is None:
@@ -101,21 +97,11 @@ class AppService:
             return result
 
         try:
-            result.evaluation = evaluator.score(query, answer, contexts)
+            result.evaluation = evaluator.score(query, answer, context)
         except Exception as exc:
             result.evaluation_error = f"Evaluation failed: {exc}"
 
         return result
-
-    def _get_context(self, query):
-        from components.retriever import multi_query_retrieve, retrieve_context
-        from components.router import is_comparative_query
-
-        if is_comparative_query(query):
-            docs, _ = multi_query_retrieve(query)
-        else:
-            docs, _ = retrieve_context(query)
-        return docs
 
     def _get_pipeline(self, mode):
         if mode == "Agentic RAG":

@@ -3,6 +3,6 @@ from components.models.embeddings import model
 from components.models.database import collection
 from components.decomposer import decompose_query, expand_query
 from components.router import should_retrieve, is_comparative_query, is_meta_question
-from components.retriever import retrieve_context, multi_query_retrieve
+from components.retriever import retrieve_context, retrieve_context_expanded, multi_query_retrieve
 from components.evaluator import is_context_sufficient
 from components.generator import generate_answer
