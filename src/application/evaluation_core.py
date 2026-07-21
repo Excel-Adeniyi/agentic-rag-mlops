@@ -50,7 +50,7 @@ def run_ragas_evaluation(dataset):
     embeddings = LangchainEmbeddingsWrapper(
         HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     )
-    run_config = RunConfig(max_workers=4, timeout=300)
+    run_config = RunConfig(max_workers=1, timeout=300)
 
     return evaluate(
         dataset,
@@ -62,18 +62,11 @@ def run_ragas_evaluation(dataset):
     )
 
 
-def _mean_score(value):
-    if isinstance(value, (list, tuple)):
-        valid = [v for v in value if v is not None]
-        return float(sum(valid) / len(valid)) if valid else float("nan")
-    return float(value)
-
-
 def scores_to_dict(scores):
     return {
-        "faithfulness": _mean_score(scores["faithfulness"]),
-        "answer_relevancy": _mean_score(scores["answer_relevancy"]),
-        "context_precision": _mean_score(scores["context_precision"]),
+        "faithfulness": float(scores["faithfulness"]),
+        "answer_relevancy": float(scores["answer_relevancy"]),
+        "context_precision": float(scores["context_precision"]),
     }
 
 

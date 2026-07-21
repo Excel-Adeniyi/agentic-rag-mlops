@@ -14,6 +14,7 @@ for _p in (_ROOT, _ROOT / "src"):
 import streamlit as st
 from application import build_default_app_service
 
+# Page config
 st.set_page_config(
     page_title="MLOps Doc Assistant",
     page_icon="🔧",
