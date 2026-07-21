@@ -13,6 +13,11 @@ def baseline_rag(question):
     4. Generate with Llama 3.2
     5. Return answer
     """
+    print("Pipeline: Baseline RAG")
+    print(f"Question: {question}")
+
     context, distances = retrieve_context(question)
+    print(f"Retrieved {len(context)} chunks (distances: {[f'{d:.3f}' for d in distances]})")
+
     answer = generate_answer(question, context=context)
     return answer, context
