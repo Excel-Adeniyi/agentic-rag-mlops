@@ -1,0 +1,61 @@
+pipeline,index,query,faithfulness,answer_relevancy,context_precision
+baseline,0,What command lists all running pods in Kubernetes?,0.0,0.8860089549679442,0.99999999995
+baseline,1,How do I view logs for a Docker container?,1.0,0.9999999999998369,0.99999999995
+baseline,2,What command checks the status of a Kubernetes deployment?,0.5,0.950003492604295,0.9999999999
+baseline,3,How do I stop a running Docker container?,0.75,0.955871468054487,0.49999999995
+baseline,4,What is the default port Jenkins runs on?,1.0,0.0,0.0
+baseline,5,How do I list all Kubernetes namespaces?,0.3333333333333333,0.9986059962558111,0.9999999999
+baseline,6,What command pulls a Docker image from a registry?,1.0,0.9650718730747815,0.9999999999666667
+baseline,7,How do I restart a Kubernetes deployment?,0.6666666666666666,0.0,0.0
+baseline,8,What command shows all Docker images on my machine?,0.0,0.7433420915675842,0.0
+baseline,9,How do I delete a Kubernetes pod?,0.6666666666666666,0.0,0.9999999999666667
+baseline,10,"My pod keeps crashing, what should I do?",0.75,0.0,0.9999999999666667
+baseline,11,"My Docker container exits immediately after starting, what is wrong?",1.0,0.0,0.99999999995
+baseline,12,"My Kubernetes deployment is not updating after I made changes, what should I do?",0.0,0.0,0.0
+baseline,13,"My Jenkins pipeline is failing but I do not know why, how do I investigate?",0.14285714285714285,0.9699803179478698,0.0
+baseline,14,"My Kubernetes pod is stuck in pending state, what should I do?",1.0,0.9791836172599849,0.9999999999
+baseline,15,"I cannot connect to my Docker container from outside, what is wrong?",1.0,0.5939746083318549,0.9999999999666667
+baseline,16,"My Kubernetes nodes are not ready, how do I investigate?",0.0,0.9822635186123811,0.0
+baseline,17,"My Docker image build is failing, what should I check?",0.0,0.9259375306015522,0.0
+baseline,18,"My Jenkins build works locally but fails in the pipeline, what should I check?",0.0,0.0,0.0
+baseline,19,"My Kubernetes deployment has zero available pods, what is wrong?",0.4,0.0,0.0
+baseline,20,What is the difference between a namespace and a deployment in Kubernetes?,nan,0.9999999999999997,0.49999999995
+baseline,21,What is the difference between a pod and a container in Kubernetes?,0.3333333333333333,0.0,0.0
+baseline,22,What is the difference between docker run and docker start?,1.0,0.9642586706470917,0.0
+baseline,23,What is the difference between a Kubernetes deployment and a statefulset?,1.0,0.0,0.0
+baseline,24,What is the difference between docker copy and docker volume?,0.6666666666666666,0.0,0.0
+baseline,25,What is the difference between a Jenkins declarative and scripted pipeline?,1.0,0.0,0.9999999999
+baseline,26,What is the difference between kubectl apply and kubectl create?,1.0,0.0,0.0
+baseline,27,What is the difference between a Kubernetes service and an ingress?,0.6666666666666666,0.0,0.0
+baseline,28,What is the difference between docker compose and Kubernetes?,0.3333333333333333,0.9919320480936009,0.0
+baseline,29,What is the difference between a Jenkins stage and a step?,0.5,0.0,0.5833333333041666
+agentic,0,What command lists all running pods in Kubernetes?,0.0,0.8860089549679442,0.99999999995
+agentic,1,How do I view logs for a Docker container?,1.0,0.9999999999998369,0.99999999995
+agentic,2,What command checks the status of a Kubernetes deployment?,0.5,0.950003492604295,0.9999999999
+agentic,3,How do I stop a running Docker container?,0.75,0.955871468054487,0.49999999995
+agentic,4,What is the default port Jenkins runs on?,1.0,0.0,0.0
+agentic,5,How do I list all Kubernetes namespaces?,0.3333333333333333,0.9986059962558111,0.9999999999
+agentic,6,What command pulls a Docker image from a registry?,1.0,0.9650718730747815,0.9999999999666667
+agentic,7,How do I restart a Kubernetes deployment?,0.6666666666666666,0.0,0.0
+agentic,8,What command shows all Docker images on my machine?,0.0,0.7433420915675842,0.0
+agentic,9,How do I delete a Kubernetes pod?,0.6666666666666666,0.0,0.9999999999666667
+agentic,10,"My pod keeps crashing, what should I do?",0.75,0.0,0.9999999999666667
+agentic,11,"My Docker container exits immediately after starting, what is wrong?",1.0,0.0,0.99999999995
+agentic,12,"My Kubernetes deployment is not updating after I made changes, what should I do?",0.0,0.0,0.0
+agentic,13,"My Jenkins pipeline is failing but I do not know why, how do I investigate?",0.14285714285714285,0.9699803179478698,0.0
+agentic,14,"My Kubernetes pod is stuck in pending state, what should I do?",1.0,0.9791836172599849,0.9999999999
+agentic,15,"I cannot connect to my Docker container from outside, what is wrong?",1.0,0.5939746083318549,0.9999999999666667
+agentic,16,"My Kubernetes nodes are not ready, how do I investigate?",0.0,0.9822635186123811,0.0
+agentic,17,"My Docker image build is failing, what should I check?",0.0,0.9259375306015522,0.0
+agentic,18,"My Jenkins build works locally but fails in the pipeline, what should I check?",0.0,0.0,0.0
+agentic,19,"My Kubernetes deployment has zero available pods, what is wrong?",0.4,0.0,0.0
+agentic,20,What is the difference between a namespace and a deployment in Kubernetes?,0.7142857142857143,0.9778762455878355,0.0
+agentic,21,What is the difference between a pod and a container in Kubernetes?,1.0,0.0,0.0
+agentic,22,What is the difference between docker run and docker start?,1.0,0.9639801303490474,0.0
+agentic,23,What is the difference between a Kubernetes deployment and a statefulset?,0.6666666666666666,0.0,0.0
+agentic,24,What is the difference between docker copy and docker volume?,0.5,0.0,0.0
+agentic,25,What is the difference between a Jenkins declarative and scripted pipeline?,0.8333333333333334,0.0,0.9999999999
+agentic,26,What is the difference between kubectl apply and kubectl create?,1.0,0.0,0.0
+agentic,27,What is the difference between a Kubernetes service and an ingress?,0.3333333333333333,0.0,0.0
+agentic,28,What is the difference between docker compose and Kubernetes?,0.75,0.0,0.0
+agentic,29,What is the difference between a Jenkins stage and a step?,1.0,0.9119388993881287,0.9999999999
