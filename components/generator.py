@@ -10,11 +10,10 @@ I do not have documentation for other MLOps tools such as cloud platforms,
 model serving frameworks, or CI/CD alternatives outside Jenkins."""
 
 def generate_answer(question, context=None):
-
+    """Generate a final answer, with or without context"""
     if is_meta_question(question):
         return SCOPE_RESPONSE
-    
-    """Generate a final answer, with or without context"""
+
     if context:
         prompt = f"""You are an expert MLOps assistant. 
 Answer the question using ONLY the context provided below.
