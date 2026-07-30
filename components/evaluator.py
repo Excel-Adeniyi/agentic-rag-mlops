@@ -27,4 +27,4 @@ Reply with ONLY one word: SUFFICIENT or INSUFFICIENT"""
     )
     
     decision = response['message']['content'].strip().upper()
-    return "SUFFICIENT" in decision
+    return "INSUFFICIENT" not in decision
